@@ -2,7 +2,6 @@ package com.keyin.membership;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
-    public Member saveMember(Member member) {
+    public Member addMember(Member member) {
         return memberRepository.save(member);
     }
 
@@ -28,7 +27,6 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    // Search methods
     public List<Member> searchByName(String name) {
         return memberRepository.findByMemberName(name);
     }
@@ -37,10 +35,4 @@ public class MemberService {
         return memberRepository.findByMemberPhone(phone);
     }
 
-    public List<Member> searchByStartDate(LocalDate startDate) {
-        return memberRepository.findByStartDate(startDate);
-    }
-    public List<Member> searchByMembershipDuration(Integer duration) {
-        return memberRepository.findByMembershipDuration(duration);
-    }
 }

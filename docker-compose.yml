@@ -1,6 +1,6 @@
 services:
   myapp-main:
-    image: golf_club:latest
+    image: golf-club:latest
     ports:
       - "8080:8080"
     environment:

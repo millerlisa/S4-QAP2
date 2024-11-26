@@ -3,7 +3,6 @@ package com.keyin.membership;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -13,9 +12,10 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+
     @GetMapping
-    public List<Member> getAllMembers() {
-        return memberService.getAllMembers();
+    public ResponseEntity<List<Member>> getAllMembers() {
+        return ResponseEntity.ok(memberService.getAllMembers());
     }
 
     @GetMapping("/{id}")
@@ -26,8 +26,8 @@ public class MemberController {
     }
 
     @PostMapping
-    public Member createMember(@RequestBody Member member) {
-        return memberService.saveMember(member);
+    public ResponseEntity<Member> addMember(@RequestBody Member member) {
+        return ResponseEntity.ok(memberService.addMember(member));
     }
 
     @PutMapping("/{id}")
@@ -35,7 +35,7 @@ public class MemberController {
         return memberService.getMemberById(id)
                 .map(existingMember -> {
                     member.setId(id);
-                    return ResponseEntity.ok(memberService.saveMember(member));
+                    return ResponseEntity.ok(memberService.addMember(member));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -49,23 +49,13 @@ public class MemberController {
         return ResponseEntity.notFound().build();
     }
 
-    // Search endpoints
-    @GetMapping("/search/name/{name}")
-    public List<Member> searchByName(@PathVariable String name) {
-        return memberService.searchByName(name);
+    @GetMapping("/search")
+    public ResponseEntity<List<Member>> searchByName(@RequestParam String name) {
+        return ResponseEntity.ok(memberService.searchByName(name));
     }
 
     @GetMapping("/search/phone/{phone}")
-    public List<Member> searchByPhone(@PathVariable String phone) {
-        return memberService.searchByPhone(phone);
-    }
-
-    @GetMapping("/search/startDate")
-    public List<Member> searchByStartDate(@RequestParam LocalDate startDate) {
-        return memberService.searchByStartDate(startDate);
-    }
-    @GetMapping("/search/duration/{duration}")
-    public List<Member> searchByMembershipDuration(@PathVariable Integer duration) {
-        return memberService.searchByMembershipDuration(duration);
+    public ResponseEntity<List<Member>> searchByPhone(@PathVariable String phone) {
+        return ResponseEntity.ok(memberService.searchByPhone(phone));
     }
 }

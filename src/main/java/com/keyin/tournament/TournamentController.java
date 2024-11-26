@@ -28,7 +28,7 @@ public class TournamentController {
 
     @PostMapping
     public Tournament createTournament(@RequestBody Tournament tournament) {
-        return tournamentService.saveTournament(tournament);
+        return tournamentService.addTournament(tournament);
     }
 
     @PutMapping("/{id}")
@@ -36,7 +36,7 @@ public class TournamentController {
         return tournamentService.getTournamentById(id)
                 .map(existingTournament -> {
                     tournament.setId(id);
-                    return ResponseEntity.ok(tournamentService.saveTournament(tournament));
+                    return ResponseEntity.ok(tournamentService.addTournament(tournament));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -50,7 +50,6 @@ public class TournamentController {
         return ResponseEntity.notFound().build();
     }
 
-    // Search endpoints
     @GetMapping("/search/location/{location}")
     public List<Tournament> searchByLocation(@PathVariable String location) {
         return tournamentService.searchByLocation(location);
@@ -62,15 +61,6 @@ public class TournamentController {
         return tournamentService.searchByStartDate(startDate);
     }
 
-    @GetMapping("/search/dateRange")
-    public List<Tournament> searchByDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
-        return tournamentService.searchByDateRange(start, end);
-    }
-
-
-    // Member management endpoints
     @PostMapping("/{tournamentId}/members/{memberId}")
     public Tournament addMemberToTournament(
             @PathVariable Long tournamentId,

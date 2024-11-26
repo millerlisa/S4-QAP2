@@ -8,6 +8,6 @@ import java.util.List;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByMemberName(String name);
     List<Member> findByMemberPhone(String phone);
-    List<Member> findByStartDate(LocalDate startDate);
-    List<Member> findByMembershipDuration(Integer duration);
+
+    Object findByStartDate(LocalDate searchDate);
 }

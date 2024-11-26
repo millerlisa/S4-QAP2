@@ -5,8 +5,10 @@ import com.keyin.membership.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class TournamentService {
@@ -25,7 +27,7 @@ public class TournamentService {
         return tournamentRepository.findById(id);
     }
 
-    public Tournament saveTournament(Tournament tournament) {
+    public Tournament addTournament(Tournament tournament) {
         return tournamentRepository.save(tournament);
     }
 
@@ -33,7 +35,6 @@ public class TournamentService {
         tournamentRepository.deleteById(id);
     }
 
-    // Search methods
     public List<Tournament> searchByStartDate(LocalDate startDate) {
         return tournamentRepository.findByStartDate(startDate);
     }
@@ -42,12 +43,6 @@ public class TournamentService {
         return tournamentRepository.findByLocation(location);
     }
 
-    public List<Tournament> searchByDateRange(LocalDate start, LocalDate end) {
-        return tournamentRepository.findByDates(start, end);
-    }
-
-
-    // Member management
     public Tournament addMemberToTournament(Long tournamentId, Long memberId) {
         Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new RuntimeException("Tournament not found"));
@@ -55,7 +50,12 @@ public class TournamentService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
-        tournament.getParticipatingMembers().add(member);
+        Set<Member> memberList =  tournament.getMembers();
+
+        memberList.add(member);
+
+        tournament.setMembers(memberList);
+
         return tournamentRepository.save(tournament);
     }
 
@@ -63,7 +63,7 @@ public class TournamentService {
         Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new RuntimeException("Tournament not found"));
 
-        tournament.getParticipatingMembers().removeIf(member -> member.getId().equals(memberId));
+        tournament.getMembers().removeIf(member -> member.getId().equals(memberId));
         return tournamentRepository.save(tournament);
     }
 }

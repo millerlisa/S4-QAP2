@@ -3,7 +3,6 @@ package com.keyin.tournament;
 import com.keyin.membership.Member;
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -19,15 +18,16 @@ public class Tournament {
     private Double entryFee;
     private Double cashPrizeAmount;
 
-    @ManyToMany
-    @JoinTable(
-            name = "tournament_members",
-            joinColumns = @JoinColumn(name = "tournament_id"),
-            inverseJoinColumns = @JoinColumn(name = "member_id")
-    )
-    private Set<Member> participatingMembers = new HashSet<>();
+//    @ManyToMany
+//    @JoinTable(
+//            name = "tournament_members",
+//            joinColumns = @JoinColumn(name = "tournament_id"),
+//            inverseJoinColumns = @JoinColumn(name = "member_id")
+//    )
 
-    // Getters and Setters
+    @OneToMany
+    private Set<Member> members;
+
     public Long getId() {
         return id;
     }
@@ -76,11 +76,9 @@ public class Tournament {
         this.cashPrizeAmount = cashPrizeAmount;
     }
 
-    public Set<Member> getParticipatingMembers() {
-        return participatingMembers;
+    public Set<Member> getMembers() {
+        return members;
     }
 
-    public void setParticipatingMembers(Set<Member> participatingMembers) {
-        this.participatingMembers = participatingMembers;
-    }
+    public void setMembers(Set<Member> members) {this.members = members; }
 }
